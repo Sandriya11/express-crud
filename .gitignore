@@ -1,0 +1,22 @@
+# Node.js dependencies
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# dotenv environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
