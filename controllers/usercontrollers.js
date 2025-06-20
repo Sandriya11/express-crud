@@ -27,9 +27,26 @@ exports.createUser = async (req, res) => {
 
 // Get users
 exports.getUsers = async (req, res) => {
+  const page=parseInt(req.query.page)||1;
+  const limit=parseInt(req.query.limit)||5;
+  const offset = (page-1)*limit;
   try {
-    const users = await User.findAll();
-    res.json(formatResponse("all user details", users,"success",201));
+    const {count,rows:users} = await User.findAndCountAll({
+      where:{status:1},
+      limit,
+      offset
+    });
+    res.status(200).json({
+      message: "User list (paginated)",
+      data: {
+        users,
+        currentPage: page,
+        totalPages: Math.ceil(count / limit),
+        totalUsers: count
+      },
+      status: "success",
+      code: 200
+    });
   } catch (error) {
     res.status(500).json(formatResponse( "Error fetching users", null ,"error",500));
   }
