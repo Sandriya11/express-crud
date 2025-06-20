@@ -1,6 +1,8 @@
 const fs=require('fs');
 const path = require('path');
 const { User } = require('../models');
+const { getPagination, formatPagination } = require('../utils/helper');
+
 //const cors = require('cors');
 
 let user=[];
@@ -27,28 +29,17 @@ exports.createUser = async (req, res) => {
 
 // Get users
 exports.getUsers = async (req, res) => {
-  const page=parseInt(req.query.page)||1;
-  const limit=parseInt(req.query.limit)||5;
-  const offset = (page-1)*limit;
+   const { limit, offset, currentPage } = getPagination(req.query.page, req.query.limit);
   try {
     const {count,rows:users} = await User.findAndCountAll({
       where:{status:1},
       limit,
       offset
     });
-    res.status(200).json({
-      message: "User list (paginated)",
-      data: {
-        users,
-        currentPage: page,
-        totalPages: Math.ceil(count / limit),
-        totalUsers: count
-      },
-      status: "success",
-      code: 200
-    });
+    res.status(200).json(formatResponse ("User list (paginated)",formatPagination(users, count, limit, currentPage),"success", 200));
+
   } catch (error) {
-    res.status(500).json(formatResponse( "Error fetching users", null ,"error",500));
+    res.status(500).json(formatResponse("Error fetching users", null, "error", 500));
   }
 };
 
@@ -78,7 +69,8 @@ exports.deleteUser = async (req, res) => {
     const user = await User.findByPk(id);
     if (!user) return res.status(404).json(formatResponse( "User not found",null,"error",404 ));
 
-    await user.destroy();
+    await user.update({ status: 2 }); 
+
     res.json(formatResponse("User deleted",user,"success",200 ));
   } catch (error) {
     res.status(500).json(formatResponse("Error deleting user",null, "error",500 ));
