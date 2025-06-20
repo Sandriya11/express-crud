@@ -7,16 +7,21 @@ let user=[];
 let id =1;
 
 const filePath = path.join(__dirname, '../data/data.json');
-
+const formatResponse = (message, data, status, code) => ({
+  message,
+  data,
+  status,
+  code
+});
 
 // Create user
 exports.createUser = async (req, res) => {
   try {
     const { fname, lname, age, gender } = req.body;
     const newUser = await User.create({ fname, lname, age, gender });
-    res.status(201).json(newUser);
+    res.status(201).json(formatResponse("user created",newUser,"success",201));
   } catch (error) {
-    res.status(500).json({ message: "Error creating user", error });
+    res.status(500).json(formatResponse( "Error creating user",null, "error",500 ));
   }
 };
 
@@ -24,9 +29,9 @@ exports.createUser = async (req, res) => {
 exports.getUsers = async (req, res) => {
   try {
     const users = await User.findAll();
-    res.json(users);
+    res.json(formatResponse("all user details", users,"success",201));
   } catch (error) {
-    res.status(500).json({ message: "Error fetching users", error });
+    res.status(500).json(formatResponse( "Error fetching users", null ,"error",500));
   }
 };
 
@@ -37,14 +42,14 @@ exports.updateUser = async (req, res) => {
     const id = req.params.id;
 
     const user = await User.findByPk(id);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) return res.status(404).json(formatResponse( "User not found" ,null,"error",404));
 
     user.fname = fname;
     await user.save();
 
-    res.json({ message: "User updated", user });
+    res.json(formatResponse( "User updated", user,"success",200 ));
   } catch (error) {
-    res.status(500).json({ message: "Error updating user", error });
+    res.status(500).json(formatResponse("Error updating user", null,"error",500 ));
   }
 };
 
@@ -54,11 +59,11 @@ exports.deleteUser = async (req, res) => {
     const id = req.params.id;
 
     const user = await User.findByPk(id);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) return res.status(404).json(formatResponse( "User not found",null,"error",404 ));
 
     await user.destroy();
-    res.json({ message: "User deleted" });
+    res.json(formatResponse("User deleted",user,"success",200 ));
   } catch (error) {
-    res.status(500).json({ message: "Error deleting user", error });
+    res.status(500).json(formatResponse("Error deleting user",null, "error",500 ));
   }
 };

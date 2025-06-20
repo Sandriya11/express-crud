@@ -15,8 +15,16 @@ module.exports = (sequelize, DataTypes) => {
     fname: DataTypes.STRING,
     lname: DataTypes.STRING,
     age: DataTypes.INTEGER,
-    gender: DataTypes.STRING
-  }, {
+    gender: DataTypes.STRING,
+    status: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1, // Active by default
+      validate: {
+        isIn: [[0, 1, 2]]
+      }
+    }
+  },
+  {
     sequelize,
     modelName: 'User',
   });
