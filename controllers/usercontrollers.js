@@ -2,6 +2,7 @@
 //const path = require('path');
 const { User } = require('../models');
 const { getPagination, formatPagination } = require('../utils/helper');
+const bcrypt = require('bcryptjs');
 
 //const cors = require('cors');
 
@@ -19,8 +20,11 @@ const formatResponse = (message, data, status, code) => ({
 // Create user
 exports.createUser = async (req, res) => {
   try {
-    const { fname, lname, age, gender } = req.body;
-    const newUser = await User.create({ fname, lname, age, gender });
+    const {username,password, fname, lname, age, gender } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await User.create({ username,password:hashedPassword,fname, lname, age, gender });
     res.status(201).json(formatResponse("user created",newUser,"success",201));
   } catch (error) {
     res.status(500).json(formatResponse( "Error creating user",null, "error",500 ));

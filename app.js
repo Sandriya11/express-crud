@@ -7,18 +7,25 @@ const { sequelize } = require('./models');
 //const { getPagination, formatPagination } = require('../utils/helper');
 
 
+
+
 const app = express();
-const PORT = 3000;
+app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
 const corsOptions = {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type']}
 
+  const authRoutes = require('./routes/auth');
+  app.use('/api/auth', authRoutes);
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(logger); 
 app.use(userRoutes);
+
 
 
 

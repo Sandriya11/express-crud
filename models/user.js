@@ -16,6 +16,15 @@ module.exports = (sequelize, DataTypes) => {
     lname: DataTypes.STRING,
     age: DataTypes.INTEGER,
     gender: DataTypes.STRING,
+    username:{
+      type:DataTypes.STRING,
+      allowNull:false,
+      unique:true
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     status: {
       type: DataTypes.INTEGER,
       defaultValue: 1, // Active by default
