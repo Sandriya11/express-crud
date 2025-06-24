@@ -3,6 +3,7 @@ const cors = require('cors');
 const userRoutes = require('./routes/userroutes');
 const logger = require('./middleware/logger');
 const { sequelize } = require('./models');
+//const con= require('./config/db.js')
 //const { getPagination, formatPagination } = require('../utils/helper');
 
 
@@ -18,6 +19,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(logger); 
 app.use(userRoutes);
+
 
 
 sequelize.sync().then(() => {

@@ -1,5 +1,5 @@
-const fs=require('fs');
-const path = require('path');
+//const fs=require('fs');
+//const path = require('path');
 const { User } = require('../models');
 const { getPagination, formatPagination } = require('../utils/helper');
 
@@ -8,7 +8,7 @@ const { getPagination, formatPagination } = require('../utils/helper');
 let user=[];
 let id =1;
 
-const filePath = path.join(__dirname, '../data/data.json');
+//const filePath = path.join(__dirname, '../data/data.json');
 const formatResponse = (message, data, status, code) => ({
   message,
   data,
