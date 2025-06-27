@@ -31,7 +31,12 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isIn: [[0, 1, 2]]
       }
-    }
+    },
+    refreshToken: {
+  type: DataTypes.TEXT,
+  allowNull: true
+}
+
   },
   {
     sequelize,

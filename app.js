@@ -3,10 +3,6 @@ const cors = require('cors');
 const userRoutes = require('./routes/userroutes');
 const logger = require('./middleware/logger');
 const { sequelize } = require('./models');
-//const con= require('./config/db.js')
-//const { getPagination, formatPagination } = require('../utils/helper');
-
-
 
 
 const app = express();
@@ -18,8 +14,12 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type']}
 
+  const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
+
   const authRoutes = require('./routes/auth');
-  app.use('/api/auth', authRoutes);
+  app.use('/', authRoutes);
 
 app.use(cors(corsOptions));
 app.use(express.json());
